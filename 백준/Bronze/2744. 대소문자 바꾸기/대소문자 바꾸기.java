@@ -10,15 +10,14 @@ public class Main {
         String str = br.readLine();
         
         br.close();
-        
-        String[] arr = str.split("");
 
-        for (String s : arr) {
+        for (int i = 0; i < str.length(); i++) {
             char temp = 0;
-            if (s.charAt(0) >= 65 && s.charAt(0) <= 90) {
-                temp = (char) (s.charAt(0) + 32);
-            } else if (s.charAt(0) >= 97 && s.charAt(0) <= 122) {
-                temp = (char) (s.charAt(0) - 32);
+            if (str.charAt(i) >= 65 && str.charAt(i) <= 90) {
+                temp = (char)(str.charAt(i) + 32);
+            }
+            else if (str.charAt(i) >= 97 && str.charAt(i) <= 122) {
+                temp = (char)(str.charAt(i) - 32);
             }
             System.out.print(temp);
         }
