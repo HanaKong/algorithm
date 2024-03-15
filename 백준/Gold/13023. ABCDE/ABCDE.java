@@ -34,9 +34,9 @@ public class Main {
 			list[b].add(a);
 		}
 		
-		for (int i = 0; i < N; i++) {
-			Collections.sort(list[i]);
-		}
+//		for (int i = 0; i < N; i++) {
+//			Collections.sort(list[i]);
+//		}
 		
 		visited = new boolean[N];
 		for (int i = 0; i < N; i++) {
