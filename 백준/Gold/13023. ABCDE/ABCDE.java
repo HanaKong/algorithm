@@ -1,50 +1,66 @@
-import java.util.*;
- 
-public class Main {    
-    
-    static int n;
-    static ArrayList<Integer>[] list;
-    static boolean[] visited;
-    
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        
-        int n = scan.nextInt();
-        int m = scan.nextInt();
-        
-        list = new ArrayList[n];
-        for(int i = 0; i < n; i++) {
-            list[i] = new ArrayList<>();
-        }
-        
-        for(int i = 0; i < m; i++) {
-            int a = scan.nextInt();
-            int b = scan.nextInt();
-            list[a].add(b);
-            list[b].add(a);
-        }
-        
-        for(int i = 0; i < n; i++) {
-            visited = new boolean[n];
-            dfs(i, 0);
-        }
-        System.out.println(0);
-    }
-    
-    public static void dfs(int x, int len) {
-        if(len == 4) {
-            System.out.println(1);
-            System.exit(0);
-        }
-        
-        visited[x] = true;
-        for(int i = 0; i < list[x].size(); i++) {
-            int temp = list[x].get(i);
-            if(visited[temp] == false) {
-                visited[temp] = true;
-                dfs(temp, len + 1);
-                visited[temp] = false;
-            }
-        }
-    }
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class Main {
+		static int N, M;
+		static List<Integer>[] list;
+		static boolean[] visited;	
+		
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		 
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		list = new ArrayList[N];
+		for (int i = 0; i < N; i++) {
+			list[i] = new ArrayList<>();
+		}
+		
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			list[a].add(b);
+			list[b].add(a);
+		}
+		
+		for (int i = 0; i < N; i++) {
+			Collections.sort(list[i]);
+		}
+		
+		visited = new boolean[N];
+		for (int i = 0; i < N; i++) {
+			Arrays.fill(visited, false);
+			dfs(i, 0);
+		}
+		System.out.println(0);
+		
+		br.close();
+	}
+
+	private static void dfs(int idx, int depth) {
+		if (depth == 4) {
+			System.out.println(1);
+			System.exit(0);
+		}
+		visited[idx] = true;
+		for (int i = 0; i < list[idx].size(); i++) {
+			int tmp = list[idx].get(i);
+			if (!visited[tmp]) {
+				visited[tmp] = true;
+				dfs(tmp, depth + 1);
+				visited[tmp] = false;
+			}
+		}
+	}
 }
