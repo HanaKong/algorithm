@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class Main {
-	
 	public static int[] arr;
 	public static boolean[] visited;
 	public static int N;
@@ -14,21 +13,20 @@ public class Main {
 		M = sc.nextInt();
 		arr = new int[M];
 		visited = new boolean[N + 1];
-		combination(1, 0);
+		dfs(1, 0);
 	}
-	public static void combination(int start, int cnt) {
-		if (cnt == M) {
-			for (int i = 0; i < arr.length; i++) {
-				System.out.print(arr[i] + " ");
-				if ((i+1) % M == 0) {
-					System.out.println();
-				}
+	public static void dfs(int st, int depth) {
+		if (depth == M) {
+			for (int i : arr) {
+				System.out.print(i + " ");
 			}
+			System.out.println();
 			return;
 		}
-		for (int i = start; i <= N; i++) {
-			arr[cnt] = i;
-			combination(i+1, cnt+1);
+		
+		for (int i = st; i <= N; i++) {
+			arr[depth] = i;
+			dfs(i + 1, depth + 1);
 		}
 	}
 }
