@@ -1,39 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Main {
+	static int N, M;
+	static int[] arr;
 	
-	public static int[] arr;
-	public static int N;
-	public static int M;
-	public static StringBuilder sb = new StringBuilder();
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 		
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+		N = sc.nextInt();
+		M = sc.nextInt();
+		
 		arr = new int[M];
-		combination2(1, 0);
-		System.out.println(sb);
+		
+		dfs(1, 0);
+				
 	}
-	public static void combination2(int start, int cnt) {
-		if (cnt == M) {
-			for (int i = 0; i < arr.length; i++) {
-				sb.append(arr[i] + " ");
-				if ((i+1) % M == 0) {
-					sb.append("\n");
-				}
+	public static void dfs(int st, int depth) {
+		if (depth == M) {
+			for (int i : arr) {
+				System.out.print(i + " ");
 			}
+			System.out.println();
 			return;
 		}
-		for (int i = start; i <= N; i++) {
-			arr[cnt] = i;
-			combination2(i, cnt+1);
+		
+		for (int i = st; i <= N; i++) {
+			arr[depth] = i;
+			dfs(i, depth + 1);
 		}
 	}
 }
