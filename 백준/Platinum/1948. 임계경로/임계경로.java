@@ -1,74 +1,81 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
+
 public class Main {
-  public static void main(String[] args) throws Exception {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int N = Integer.parseInt(br.readLine());
-    int M = Integer.parseInt(br.readLine());
-    ArrayList<ArrayList<dNode>> A = new ArrayList<>();
-    ArrayList<ArrayList<dNode>> reverseA = new ArrayList<>();
-    for (int i = 0; i <= N; i++) {
-      A.add(new ArrayList<>());
-      reverseA.add(new ArrayList<>());
-    }
-    int[] indegree = new int[N + 1]; // 진입차수배열
-    for (int i = 0; i < M; i++) {
-      StringTokenizer st = new StringTokenizer(br.readLine());
-      int S = Integer.parseInt(st.nextToken());
-      int E = Integer.parseInt(st.nextToken());
-      int V = Integer.parseInt(st.nextToken());
-      A.get(S).add(new dNode(E, V));
-      reverseA.get(E).add(new dNode(S, V));  //역방향 간선 정보 저장
-      indegree[E]++; // 진입차수 배열 초기화
-    }
-    StringTokenizer st = new StringTokenizer(br.readLine());
-    int startDosi = Integer.parseInt(st.nextToken());
-    int endDosi = Integer.parseInt(st.nextToken());
-    // 위상 정렬
-    Queue<Integer> queue = new LinkedList<>();
-    queue.offer(startDosi);
-    int[] result = new int[N + 1];
-    while (!queue.isEmpty()) {
-      int now = queue.poll();
-      for (dNode next : A.get(now)) {
-        indegree[next.targetNode]--;
-        result[next.targetNode] = Math.max(result[next.targetNode], result[now] + next.value);
-        if (indegree[next.targetNode] == 0) {
-          queue.offer(next.targetNode);
-        }
-      }
-    }
-    // 위상 정렬 reverse
-    int resultCount = 0;
-    boolean visited[] = new boolean[N + 1];
-    queue = new LinkedList<>();
-    queue.offer(endDosi);
-    visited[endDosi] = true;
-    while (!queue.isEmpty()) {
-      int now = queue.poll();
-      for (dNode next : reverseA.get(now)) {
-        if (result[next.targetNode] + next.value == result[now]) { //1분도 쉬지 않는 도로 체크
-          resultCount++;
-          if (visited[next.targetNode] == false) { //중복 카운트 방지를 위해 기 방문 노드 제외
-            visited[next.targetNode] = true;
-            queue.offer(next.targetNode);
-          }
-        }
-      }
-    }
-    System.out.println(result[endDosi]);
-    System.out.println(resultCount);
-  }
-}
-class dNode {
-  int targetNode;
-  int value;
-  dNode(int targetNode, int value) {
-    this.targetNode = targetNode;
-    this.value = value;
-  }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int N = Integer.parseInt(br.readLine());
+		int M = Integer.parseInt(br.readLine());
+		ArrayList<int[]>[] route = new ArrayList[N + 1];
+		ArrayList<int[]>[] reverseRoute = new ArrayList[N + 1];
+		
+		for (int i = 0; i <= N; i++) {
+			route[i] = new ArrayList<>();
+			reverseRoute[i] = new ArrayList<>();
+		}
+		
+		int[] inDegree = new int[N + 1];
+		int[] res = new int[N + 1];
+		
+		StringTokenizer st;
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			int A = Integer.parseInt(st.nextToken()); 
+			int B = Integer.parseInt(st.nextToken()); 
+			int C = Integer.parseInt(st.nextToken());
+			route[A].add(new int[] {B, C});
+			reverseRoute[B].add(new int[] {A, C});
+			inDegree[B]++;
+		}
+		st = new StringTokenizer(br.readLine(), " ");
+		int start = Integer.parseInt(st.nextToken());
+		int end = Integer.parseInt(st.nextToken());
+		
+		Queue<Integer> q = new ArrayDeque<Integer>();
+		q.offer(start);
+		
+		while (!q.isEmpty()) {
+			int now = q.poll();
+			
+			for (int[] next : route[now]) {
+				inDegree[next[0]]--;
+				res[next[0]] = Math.max(res[next[0]], res[now] + next[1]);
+				
+				if (inDegree[next[0]] == 0) {
+					q.offer(next[0]);
+				}
+			}
+		}
+		
+		int cnt = 0;
+		boolean[] visited = new boolean[N + 1];
+		
+		q.offer(end);
+		
+		visited[end] = true;
+		
+		while (!q.isEmpty()) { 
+			int now = q.poll();
+			for (int[] prev : reverseRoute[now]) {
+				if (res[prev[0]] + prev[1] == res[now]) {
+					cnt++;
+					
+					if (!visited[prev[0]]) {
+						visited[prev[0]] = true;
+						q.offer(prev[0]);
+					}
+				}
+			}
+		}
+		
+		bw.write(String.valueOf(res[end]));
+		bw.newLine();
+		bw.write(String.valueOf(cnt));
+		
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 }
