@@ -1,45 +1,48 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
 		
-		int N = Integer.parseInt(br.readLine());
-		
-		int[] arr = new int[N];
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = sc.nextInt();
+		List<Integer> list = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
+			list.add(sc.nextInt());
 		}
-		Arrays.sort(arr);
+		Collections.sort(list);
 		
-		int M = Integer.parseInt(br.readLine());
-		
-		st = new StringTokenizer(br.readLine());
+		int M = sc.nextInt();
 		for (int i = 0; i < M; i++) {
-			System.out.println(binarySearch(arr, Integer.parseInt(st.nextToken()), 0, arr.length-1)); 
-		}
-	}
-	public static int binarySearch(int[] arr, int key, int low, int high) {
-		int mid;
-		
-		if(low <= high) {
-			mid = (low+high) / 2;
-			
-			if(key == arr[mid]) {
-				return 1;
+			boolean check = false;
+			int target = sc.nextInt();
+			int st = 0;
+			int end = list.size() - 1;
+			while (st <= end) {
+				int mid = (st + end) / 2;
+				int midValue = list.get(mid);
+				if (midValue > target) {
+					end = mid - 1;
+				}
+				else if (midValue < target) {
+					st = mid + 1;
+				}
+				else {
+					check = true;
+					break;
+				}
 			}
-			else if (key < arr[mid]) {
-				return binarySearch(arr, key, low, mid-1);
+			if (check) {
+				sb.append(1).append("\n");
 			}
 			else {
-				return binarySearch(arr, key, mid+1, high);
+				sb.append(0).append("\n");
 			}
 		}
-		return 0;
+		System.out.println(sb);
+		sc.close();
 	}
 }
