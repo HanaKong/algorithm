@@ -2,25 +2,27 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		
-		int N = sc.nextInt();
+		int N = Integer.parseInt(br.readLine());
 		Map<Integer, Integer> nums = new HashMap<>();
 		
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 		for (int i = 0; i < N; i++) {
 			int tmp = 0;
-			int num = sc.nextInt();
+			int num = Integer.parseInt(st.nextToken());
 			if (nums.get(num) != null) {
 				tmp = nums.get(num);
 			}
 			nums.put(num, tmp + 1);
 		}
-		int M = sc.nextInt();
+		int M = Integer.parseInt(br.readLine());
 		
+		st = new StringTokenizer(br.readLine(), " ");
 		for (int i = 0; i < M; i++) {
-			int res = sc.nextInt();
+			int res = Integer.parseInt(st.nextToken());
 			if (nums.get(res) != null) {
 				sb.append(nums.get(res)).append(" ");
 			}
@@ -31,6 +33,6 @@ public class Main {
 		
 		System.out.println(sb);
 		
-		sc.close();
+		br.close();
 	}
 }
